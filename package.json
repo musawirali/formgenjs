@@ -1,0 +1,15 @@
+{
+  "name": "formGeneratorJS",
+  "description": "Form Generator",
+  "version": "0.0.1",
+  "author": "Musawir Shah <musawir@gmail.com>",
+  "private": true,
+  "dependencies": {
+    "express": "3.x",
+    "connect": "*",
+    "coffee-script": "*",
+    "mongoose": "*",
+    "passport": "*",
+    "passport-local": "*"
+  }
+}
