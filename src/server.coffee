@@ -2,8 +2,10 @@
 express       = require 'express'
 passport      = require 'passport'
 LocalStrategy = require('passport-local').Strategy;
+mongoose      = require 'mongoose'
 site          = require './site'
 fgapp         = require './fgapp'
+fguser        = require './fguser'
 
 # 1] Configure Express
 app = express()
@@ -39,5 +41,25 @@ app.post '/login',
       failureFlash: true
     )
 
-# 4] Start server
-app.listen(3000)
+# 4] Connect to DB and start server
+mongoose.connect 'mongodb://localhost/fromgenjs'
+db = mongoose.connection
+db.on 'error', console.error.bind(console, 'connection error:')
+db.on 'open', ()->
+  console.log 'Connected to DB, starting server.'
+
+  # Setup the User schema
+  User = fguser.setup mongoose
+  User.find (err, users)->
+    return console.log err if err
+    console.log users
+    # Create a test user
+    fguser.createUser 
+      username: 'tester',
+      password: 'tested',
+      email: 'tester@tested.com'
+    , (err, obj)->
+      return console.log err if err
+      console.log "Saved user"
+
+  app.listen(3000)
